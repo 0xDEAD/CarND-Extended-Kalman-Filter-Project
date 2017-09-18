@@ -29,6 +29,11 @@ public:
   */
   MatrixXd CalculateJacobian(const VectorXd& x_state);
 
+  /**
+  * A helper method to convert polar coordinates from radar to cartesian coordinates + cartesian speed.
+  */
+  VectorXd PolarToCartesian(double rho, double phi, double rhodot);
+
 };
 
 #endif /* TOOLS_H_ */
