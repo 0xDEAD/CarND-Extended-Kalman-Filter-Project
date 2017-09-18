@@ -14,8 +14,6 @@ using std::vector;
 FusionEKF::FusionEKF() {
   is_initialized_ = false;
 
-  previous_timestamp_ = 0;
-
   // initializing matrices
   R_laser_ = MatrixXd(2, 2);
   R_radar_ = MatrixXd(3, 3);
@@ -63,6 +61,8 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
            0,                                     // vx = unknown
            0;                                     // vy = unknown
     }
+
+    previous_timestamp_ = measurement_pack.timestamp_;
 
     /**
      * Initialize the state covariance.
