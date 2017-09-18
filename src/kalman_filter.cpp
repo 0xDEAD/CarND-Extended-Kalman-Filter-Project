@@ -22,11 +22,17 @@ void KalmanFilter::Predict(const double deltaT, const double noise_ax, const dou
   */
 }
 
-void KalmanFilter::Update(const VectorXd &z, Eigen::MatrixXd H, Eigen::MatrixXd &R) {
-  /**
-  TODO:
-    * update the state by using Kalman Filter equations
-  */
+void KalmanFilter::Update(const VectorXd &z, const Eigen::MatrixXd &H, const Eigen::MatrixXd &R) {
+  /** Update the state directly, no conversion needed */
+  VectorXd y = z - (H * x_);
+  MatrixXd Ht = H.transpose();
+  MatrixXd S = H * P_ * Ht + R;
+  MatrixXd K = (P_ * Ht) * S.inverse();
+  MatrixXd I = MatrixXd::Identity(x_.size(), x_.size());
+
+  // Update state + state covariance
+  x_ = x_ + (K * y);
+  P_ = (I - K * H) * P_;
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z, Eigen::MatrixXd H, Eigen::MatrixXd &R) {

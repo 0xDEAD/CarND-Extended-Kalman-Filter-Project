@@ -44,8 +44,10 @@ public:
   /**
    * Updates the state by using standard Kalman Filter equations
    * @param z The measurement at k+1
+   * @param H
+   * @param R
    */
-  void Update(const Eigen::VectorXd &z, Eigen::MatrixXd H, Eigen::MatrixXd &R);
+  void Update(const Eigen::VectorXd &z, const Eigen::MatrixXd &H, const Eigen::MatrixXd &R);
 
 
   /**

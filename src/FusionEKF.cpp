@@ -22,6 +22,9 @@ FusionEKF::FusionEKF() {
   H_laser_ = MatrixXd(2, 4);
   Hj_ = MatrixXd(3, 4);
 
+  H_laser_ << 1, 0, 0, 0,
+              0, 1, 0, 0;
+
   //measurement covariance matrix - laser
   R_laser_ << 0.0225, 0,
         0, 0.0225;
@@ -99,16 +102,10 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
    *  Update
    ****************************************************************************/
 
-  /**
-   TODO:
-     * Use the sensor type to perform the update step.
-     * Update the state and covariance matrices.
-   */
-
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
-    // Radar updates
-  } else {
-    // Laser updates
+  } else { // sensor_type_ == MeasurementPackage::LASER
+    /** Meassurement from Lidar can be used directly to update the filter. */
+    ekf_.Update(measurement_pack.raw_measurements_, H_laser_, R_laser_);
   }
 
   // print the output
