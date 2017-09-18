@@ -6,11 +6,9 @@ using Eigen::VectorXd;
 using Eigen::MatrixXd;
 using std::vector;
 
-Tools::Tools() {}
+namespace Tools {
 
-Tools::~Tools() {}
-
-VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
+VectorXd CalculateRMSE(const vector<VectorXd> &estimations,
                               const vector<VectorXd> &ground_truth) {
   /**
   TODO:
@@ -18,7 +16,7 @@ VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
   */
 }
 
-MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
+MatrixXd CalculateJacobian(const VectorXd& x_state) {
   /**
   TODO:
     * Calculate a Jacobian here.
@@ -36,3 +34,5 @@ VectorXd PolarToCartesian(double rho, double phi, double rhodot)
   result << px, py, vx, vy;
   return result;
 }
+
+} // namespace Tools

@@ -7,18 +7,7 @@ using Eigen::MatrixXd;
 using Eigen::VectorXd;
 using namespace std;
 
-class Tools {
-public:
-  /**
-  * Constructor.
-  */
-  Tools();
-
-  /**
-  * Destructor.
-  */
-  virtual ~Tools();
-
+namespace Tools {
   /**
   * A helper method to calculate RMSE.
   */
@@ -33,7 +22,6 @@ public:
   * A helper method to convert polar coordinates from radar to cartesian coordinates + cartesian speed.
   */
   VectorXd PolarToCartesian(double rho, double phi, double rhodot);
-
-};
+}
 
 #endif /* TOOLS_H_ */
