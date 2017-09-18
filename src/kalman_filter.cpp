@@ -1,4 +1,5 @@
 #include "kalman_filter.h"
+#include <math.h>
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -14,7 +15,15 @@ void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in) {
 }
 
 void KalmanFilter::Predict(const double deltaT, const double noise_ax, const double noise_ay) {
-  // TODO: calculate Q from deltaT, noise_ax, noise_ay
+  /**
+   * Prepare process covariance matrix from elapsed time and given noise.
+   * For details on the matrix, see: ND, Term 2, Lesson 5, 9. Process Covariance Matrix
+   */
+  MatrixXd Q(4, 4);
+  Q << pow(deltaT, 4) / 4.0 * noise_ax,           0,                 pow(deltaT, 3) / 2.0 * noise_ax,         0,
+                 0,                 pow(deltaT, 4) / 4.0 * noise_ay,                0,            pow(deltaT, 3) / 2.0 * noise_ay,
+       pow(deltaT, 3) / 2.0 * noise_ax,           0,                 pow(deltaT, 2) * noise_ax,               0,
+                 0,                 pow(deltaT, 3) / 2.0 * noise_ay,                0,            pow(deltaT, 2) * noise_ay;
 
   /**
   TODO:
