@@ -17,10 +17,41 @@ VectorXd CalculateRMSE(const vector<VectorXd> &estimations,
 }
 
 MatrixXd CalculateJacobian(const VectorXd& x_state) {
+  MatrixXd Hj(3,4);
+
   /**
-  TODO:
-    * Calculate a Jacobian here.
-  */
+   * If px and py ~ 0, the caluculation will fail!
+   * Return a dummy Jacobian instead which doesn't have any effect in the filter update.
+   */
+  if (x_state[0] < 0.001 && x_state[0] > - 0.001 && x_state[1] < 0.001 && x_state[1] > - 0.001) {
+    //
+    Hj << 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
+    return Hj;
+  }
+
+  /**
+   *  Prepare some calculations to avoid duplicated effort.
+   */
+
+  // aliases
+  const double& px = x_state[0];
+  const double& py = x_state[1];
+  const double& vx = x_state[2];
+  const double& vy = x_state[3];
+
+  // summed squares
+  double squared = pow(px, 2) + pow(py, 2);
+  // square root of summed squares
+  double root = sqrt(squared);
+  // squared * root
+  double factor = squared * root;
+
+  /** Calculate a Jacobian */
+  Hj << px / root,       py / root,  0, 0,
+        -py / squared, px / squared, 0, 0,
+        py * (vx * py - vy * px) / factor, px * (vy * px - vx * py) / factor, px / root, py / root;
+
+  return Hj;
 }
 
 VectorXd PolarToCartesian(double rho, double phi, double rhodot)
