@@ -25,10 +25,20 @@ void KalmanFilter::Predict(const double deltaT, const double noise_ax, const dou
        pow(deltaT, 3) / 2.0 * noise_ax,           0,                 pow(deltaT, 2) * noise_ax,               0,
                  0,                 pow(deltaT, 3) / 2.0 * noise_ay,                0,            pow(deltaT, 2) * noise_ay;
 
-  /**
-  TODO:
-    * predict the state
-  */
+  /* Prepare matrix for state-update */
+  // px = px + deltaT * vx
+  // py = px + deltaT * yx
+  // vx = vx
+  // yx = vy
+  F_ << 1, 0, deltaT,   0,
+        0, 1,   0,    deltaT,
+        0, 0,   1,      0,
+        0, 0,   0,      1;
+
+  /** Predict the state */
+  x_ = F_ * x_;
+  MatrixXd Ft = F_.transpose();
+  P_ = F_ * P_ * Ft + Q;
 }
 
 void KalmanFilter::Update(const VectorXd &z, const Eigen::MatrixXd &H, const Eigen::MatrixXd &R) {
