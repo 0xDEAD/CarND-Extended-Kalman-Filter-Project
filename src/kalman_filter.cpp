@@ -8,10 +8,9 @@ KalmanFilter::KalmanFilter() {}
 
 KalmanFilter::~KalmanFilter() {}
 
-void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in) {
+void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in) {
   x_ = x_in;
   P_ = P_in;
-  F_ = F_in;
 }
 
 void KalmanFilter::Predict(const double deltaT, const double noise_ax, const double noise_ay) {
@@ -30,15 +29,16 @@ void KalmanFilter::Predict(const double deltaT, const double noise_ax, const dou
   // py = px + deltaT * yx
   // vx = vx
   // yx = vy
-  F_ << 1, 0, deltaT,   0,
-        0, 1,   0,    deltaT,
-        0, 0,   1,      0,
-        0, 0,   0,      1;
+  MatrixXd F(4, 4);
+  F << 1, 0, deltaT,   0,
+       0, 1,   0,    deltaT,
+       0, 0,   1,      0,
+       0, 0,   0,      1;
 
   /** Predict the state */
-  x_ = F_ * x_;
-  MatrixXd Ft = F_.transpose();
-  P_ = F_ * P_ * Ft + Q;
+  x_ = F * x_;
+  MatrixXd Ft = F.transpose();
+  P_ = F * P_ * Ft + Q;
 }
 
 void KalmanFilter::Update(const VectorXd &z, const Eigen::MatrixXd &H, const Eigen::MatrixXd &R) {

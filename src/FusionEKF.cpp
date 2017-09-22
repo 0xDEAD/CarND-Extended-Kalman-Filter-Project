@@ -75,15 +75,8 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
          0, 0, 1000,    0,
          0, 0,    0, 1000;
 
-    /** Initial transition matrix */
-    MatrixXd F(4, 4);
-    F << 1, 0, 1, 0,
-         0, 1, 0, 1,
-         0, 0, 1, 0,
-         0, 0, 0, 1;
-
     /** Initialize the KalmanFilter */
-    ekf_.Init(x, P, F);
+    ekf_.Init(x, P);
 
     // done initializing, no need to predict or update
     is_initialized_ = true;

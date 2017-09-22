@@ -11,9 +11,6 @@ public:
   // state covariance matrix
   Eigen::MatrixXd P_;
 
-  // state transition matrix
-  Eigen::MatrixXd F_;
-
   /**
    * Constructor
    */
@@ -28,9 +25,8 @@ public:
    * Init Initializes Kalman filter
    * @param x_in Initial state
    * @param P_in Initial state covariance
-   * @param F_in Transition matrix
    */
-  void Init(Eigen::VectorXd &x_in, Eigen::MatrixXd &P_in, Eigen::MatrixXd &F_in);
+  void Init(Eigen::VectorXd &x_in, Eigen::MatrixXd &P_in);
 
   /**
    * Prediction Predicts the state and the state covariance
