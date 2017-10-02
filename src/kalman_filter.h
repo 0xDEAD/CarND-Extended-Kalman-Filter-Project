@@ -52,6 +52,14 @@ public:
    */
   void UpdateEKF(const Eigen::VectorXd &z, Eigen::MatrixXd H, Eigen::MatrixXd &R);
 
+private:
+  /**
+   * @brief Use prepared Matrix y to do calculation and update state/covariance
+   * @param y
+   * @param H
+   * @param R
+   */
+  void UpdateState(const Eigen::VectorXd &y, const Eigen::MatrixXd &H, const Eigen::MatrixXd &R);
 };
 
 #endif /* KALMAN_FILTER_H_ */
