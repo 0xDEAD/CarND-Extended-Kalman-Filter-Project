@@ -55,8 +55,26 @@ void KalmanFilter::Update(const VectorXd &z, const Eigen::MatrixXd &H, const Eig
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z, Eigen::MatrixXd H, Eigen::MatrixXd &R) {
-  /**
-  TODO:
-    * update the state by using Extended Kalman Filter equations
-  */
+  /** Convert predicted state to polar coordinates */
+  const float px = x_(0);
+  const float py = x_(1);
+  const float vx = x_(2);
+  const float vy = x_(3);
+
+  VectorXd x_polar(3);
+  float rho = sqrt(px * px + py * py);
+  float phi = atan2(py, px);
+  float rho_dot = (fabs(rho) < 0.0001) ? 0 : (px * vx + py * vy) / rho;
+  x_polar << rho, phi, rho_dot;
+
+  VectorXd y = z - x_polar;
+  MatrixXd Ht = H.transpose();
+  MatrixXd S = H * P_ * Ht + R;
+  MatrixXd Si = S.inverse();
+  MatrixXd K = (P_ * Ht) * Si;
+  MatrixXd I = MatrixXd::Identity(x_.size(), x_.size());
+
+  // Update state + state covariance
+  x_ = x_ + (K * y);
+  P_ = (I - K * H) * P_;
 }
