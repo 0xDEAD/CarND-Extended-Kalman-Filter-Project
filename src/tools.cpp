@@ -14,9 +14,11 @@ VectorXd CalculateRMSE(const vector<VectorXd> &estimations,
   rmse << 0, 0, 0, 0;
 
   // ignore invalid input
-  if (estimations.size() != 4 && ground_truth.size() != 4) {
-    return rmse;
-  }
+//  if (estimations.size() != 4 && ground_truth.size() != 4) {
+//    int es = estimations.size();
+//    int gs = ground_truth.size();
+//    return rmse;
+//  }
 
   /** Calculate the root mean squares */
   for(int i=0; i < estimations.size(); ++i) {
