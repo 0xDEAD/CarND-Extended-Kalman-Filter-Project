@@ -1,5 +1,5 @@
 #include "kalman_filter.h"
-#include <math.h>
+#include "tools.h"
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -49,16 +49,7 @@ void KalmanFilter::Update(const VectorXd &z, const Eigen::MatrixXd &H, const Eig
 
 void KalmanFilter::UpdateEKF(const VectorXd &z, Eigen::MatrixXd H, Eigen::MatrixXd &R) {
   /** Convert predicted state to polar coordinates */
-  const float px = x_(0);
-  const float py = x_(1);
-  const float vx = x_(2);
-  const float vy = x_(3);
-
-  VectorXd x_polar(3);
-  float rho = sqrt(px * px + py * py);
-  float phi = atan2(py, px);
-  float rho_dot = (fabs(rho) < 0.0001) ? 0 : (px * vx + py * vy) / rho;
-  x_polar << rho, phi, rho_dot;
+  VectorXd x_polar = Tools::CartesianToPolar(x_(0), x_(1), x_(2), x_(3));//
 
   VectorXd y = z - x_polar;
   UpdateState(y, H, R);

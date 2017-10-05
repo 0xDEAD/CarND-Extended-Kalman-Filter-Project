@@ -83,4 +83,15 @@ VectorXd PolarToCartesian(double rho, double phi, double rhodot)
   return result;
 }
 
+VectorXd CartesianToPolar(const double px, const double py, const double vx, const double vy)
+{
+  double rho = sqrt(px * px + py * py);
+  double phi = atan2(py, px);
+  double rho_dot = (fabs(rho) < 0.0001) ? 0 : (px * vx + py * vy) / rho;
+
+  VectorXd polar(3);
+  polar << rho, phi, rho_dot;
+  return polar;
+}
+
 } // namespace Tools

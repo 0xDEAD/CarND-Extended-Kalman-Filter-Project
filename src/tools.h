@@ -22,6 +22,11 @@ namespace Tools {
   * A helper method to convert polar coordinates from radar to cartesian coordinates + cartesian speed.
   */
   VectorXd PolarToCartesian(double rho, double phi, double rhodot);
+
+  /**
+  * A helper method to convert carthesian coordinates + carthesian speed from state to polar coordinates + rho_dot
+  */
+  VectorXd CartesianToPolar(const double px, const double py, const double vx, const double vy);
 }
 
 #endif /* TOOLS_H_ */
