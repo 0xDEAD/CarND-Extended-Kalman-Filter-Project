@@ -36,12 +36,18 @@ VectorXd CalculateRMSE(const vector<VectorXd> &estimations,
 MatrixXd CalculateJacobian(const VectorXd& x_state) {
   MatrixXd Hj(3,4);
 
+  // aliases
+  const double& px = x_state[0];
+  const double& py = x_state[1];
+  const double& vx = x_state[2];
+  const double& vy = x_state[3];
+
   /**
-   * If px and py ~ 0, the caluculation will fail!
+   * If px or py ~ 0, the caluculation will fail!
    * Return a dummy Jacobian instead which doesn't have any effect in the filter update.
    */
-  if (x_state[0] < 0.001 && x_state[0] > - 0.001 && x_state[1] < 0.001 && x_state[1] > - 0.001) {
-    //
+  double threshold = 0.1;
+  if ((px < threshold && px > -threshold) || (py < threshold && py > -threshold)) {
     Hj << 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
     return Hj;
   }
@@ -49,12 +55,6 @@ MatrixXd CalculateJacobian(const VectorXd& x_state) {
   /**
    *  Prepare some calculations to avoid duplicated effort.
    */
-
-  // aliases
-  const double& px = x_state[0];
-  const double& py = x_state[1];
-  const double& vx = x_state[2];
-  const double& vy = x_state[3];
 
   // summed squares
   double squared = pow(px, 2) + pow(py, 2);
